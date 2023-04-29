@@ -3,29 +3,31 @@ Open-Closed Principle
 
 Classes devem estar fechadas para modificação, mas abertas para extensão
 """
-class Animal:
-    def __init__(self, name: str):
-        self.name = name
-    
-    def get_name(self) -> str:
+
+from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    def __init__(self):
         pass
 
+    @abstractmethod
     def make_sound(self):
-        if self.name == 'lion':
-            print('roar')
-        elif self.name == 'mouse':
-            print('squeak')
-        else:
-            print('...')
+        pass
 
-animals = [
-    Animal('lion'),
-    Animal('mouse')
-]
+class Lion(Animal):
+    def make_sound(self):
+        print('roar')
+
+class Mouse(Animal):
+    def make_sound(self):
+        print('squeak')
+
+animals = [Lion(), Mouse()]
 
 def animal_sound(animals: list):
     for animal in animals:
-        animal.make_sound()
+        if isinstance(animal, Animal):
+            animal.make_sound()
 
 animal_sound(animals)
 
@@ -41,11 +43,31 @@ você decide mudar a classe da seguinte forma:
 class Discount:
     def __init__(self, customer, price):
         self.customer = customer
+        
         self.price = price
 
     def give_discount(self):
-            if self.customer == 'fav':
-                return self.price * 0.2
-            if self.customer == 'vip':
-                return self.price * 0.4
+            return self.price * self.customer.desconto
+
+
+class Customer(ABC):
+    @abstractmethod
+    def __init__(self, desconto):
+        self.__desconto = desconto
+
+    @property
+    def desconto(self):
+        return self.__desconto
+    
+class Fav(Customer):
+    def __init__(self):
+        super.__init__(0.2)
+
+class Vip(Customer):
+    def __init__(self):
+        super.__init__(0.4)
+
+class Comum(Customer):
+    def __init__(self):
+        super.__init__(0)        
 
