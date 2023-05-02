@@ -19,10 +19,16 @@ class Player:
     def name(self):
         return self.__name
 
+    def getStats(self):
+        s = ''
+        s += f'Name:{self.name()}\n'
+        s += f'HP:{self.hp()}'
+        return s
+
 class StatsReporter:
     def __init__(self, char: Player):
         self.char = char
 
     def report(self):
-        print(f'Name:{self.char.name()}')
-        print(f'HP:{self.char.hp()}')
+        print(self.char.getStats())
+
